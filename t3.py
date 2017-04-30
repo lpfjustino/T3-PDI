@@ -15,8 +15,8 @@ def fourier_analysis(filename, s, c, show=0):
 
     # Normalized Fourier Spectrum for f and g
     half_obs = math.floor(n/2)
-    F = fft(f)
-    G = fft(g)
+    F = fft(f)[:half_obs]
+    G = fft(g)[:half_obs]
     nfs_f = (abs(F) / (2*n))[:half_obs]
     nfs_g = (abs(G) / (2*n))[:half_obs]
 
@@ -25,7 +25,7 @@ def fourier_analysis(filename, s, c, show=0):
      plot_comparison(f, g, nfs_f, nfs_g)
 
     # Filtering the spectrum
-    F_hat = low_pass(nfs_f, nfs_g, c)
+    F_hat = low_pass(F, G, c)
 
     # Computing the inverse FFT for the filtered spectrum
     f_hat = ifft(F_hat)
@@ -36,11 +36,8 @@ def fourier_analysis(filename, s, c, show=0):
 
     print(np.argmax(F))
     print(np.argmax(nfs_g))
-    print(np.argmax(f))
-    print(np.argmax(f_hat))
-
-    print(f)
-    print(f_hat)
+    print(np.max(f))
+    print(np.max(np.real(f_hat)))
 
 
 # Applies Gaussian Windowing of length s on f
